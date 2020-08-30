@@ -56,7 +56,7 @@ struct Sigmoid {
 }
 
 impl Sigmoid {
-	fn init(a: i32) -> Self {
+	fn init() -> Self {
 		let output: Vec<f64>;
 		Sigmoid {
 			output: None
@@ -65,6 +65,49 @@ impl Sigmoid {
 
 	fn Sigmoid(&mut self, inputs: Array2<f64>) {
 		self.output = Some(inputs.iter().map(|x| (1.0)/(1.0 + (-x).exp())).collect::<Vec<f64>>());
+	}
+}
+
+
+struct SigmoidPrime{
+	output: Option<f64>
+}
+
+impl SigmoidPrime {
+	fn init(a: i32) -> Self {
+		let output: Vec<f64>;
+		Sigmoid {
+			output: None
+		}
+	}
+
+	fn SigmoidPrime(&mut self, inputs: Array2<f64>) {
+		self.output = Some(inputs.iter().map(|x| ((-x).exp())/((1.0 + (-x).exp()).pow(2))).collect::<Vec<f64>>());
+	}
+}
+
+struct cost{
+	yhat: Array2<f64>,
+	a: Option<Vec<f64>>,
+	J: f32
+}
+
+impl cost {
+	fn init() -> Self {
+		let yhat: Vec<f64>;
+		let J = 0.;
+		cost {
+			yhat: None,
+			a: None,
+			J: f32
+		}
+	}
+
+	fn costFunction(&mut self, X: Array2<f64>, y: Array2<f64>) {
+		self.yhat = self.forward(X);
+		let a = &y - &self.yhat;
+		let J = (a.iter().map(|x| x.pow(2)).sum())*0.5;
+
 	}
 }
 
